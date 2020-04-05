@@ -6,6 +6,7 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.ContactsContract
+import android.util.Log
 import android.widget.TextView
 
 class SendMessage : AppCompatActivity() {
@@ -13,15 +14,23 @@ class SendMessage : AppCompatActivity() {
         val PERMISSIONS_REQUEST_READ_CONTACTS = 100
     }
     var listOfContacs= arrayListOf<Contact>()
+    val nameSurnames= mutableListOf<String>()
+    val phoneNumbers = mutableListOf<String>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_send_message)
         var text:TextView=findViewById(R.id.text)
         text.text=loadContacts()
-        for (i in 0..listOfContacs.size-1)
-        {
-            print("lllllllllllllllllllllllllllllll")
+        var a = listOfContacs.distinctBy { it.phoneNumber }
+        var listOfContacs = a.distinctBy { it.nameSurname }
+        for (contact in listOfContacs) {
+
+           System.out.println(contact.nameSurname+' '+contact.phoneNumber.replace(" ",""))
+           nameSurnames.add(contact.nameSurname.toString())
+           phoneNumbers.add(contact.phoneNumber.toString().replace(" ",""))
         }
+
+        text.text=phoneNumbers.toString()
     }
     private fun loadContacts(): StringBuilder {
         var builder = StringBuilder()
