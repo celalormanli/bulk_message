@@ -18,10 +18,13 @@ class MainActivity : AppCompatActivity() {
     private var customAdapter: CustomAdapter? = null
     private var btnselect: Button? = null
     private var btndeselect: Button? = null
-    private val animallist = arrayOf("Lion", "Tiger", "Leopard", "Cat","Lion", "Tiger", "Leopard", "Cat","Lion", "Tiger", "Leopard", "Cat")
+    private val animallist = arrayListOf("Lion", "Tiger", "Leopard", "Cat","Lion", "Tiger", "Leopard", "Cat","Lion", "Tiger", "Leopard", "Cat")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+//        val intent = Intent(this, SendMessage::class.java)
+//        startActivity(intent)
+        animallist.add("CCC")
         lv = findViewById(R.id.lv) as ListView
         btnselect = findViewById(R.id.select) as Button
         btndeselect = findViewById(R.id.deselect) as Button
@@ -54,7 +57,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun getModel(isSelect: Boolean): ArrayList<Model> {
         val list = ArrayList<Model>()
-        for (i in 0..11) {
+        for (i in 0..animallist.size-1) {
 
             val model = Model()
             model.setSelecteds(isSelect)
