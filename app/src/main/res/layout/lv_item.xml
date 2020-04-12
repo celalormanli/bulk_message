@@ -5,7 +5,7 @@
 
     <CheckBox
         android:id="@+id/cb"
-        android:layout_width="50dp"
+        android:layout_width="40dp"
         android:layout_height="50dp" />
 
     <TextView
@@ -13,6 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:text="animal"
-        android:textSize="30dp" />
+        android:textSize="25dp" />
 
 </LinearLayout>

@@ -49,7 +49,7 @@ class CustomAdapter(private val context: Context, modelArrayList: ArrayList<Mode
             convertView = inflater.inflate(R.layout.lv_item, null, true)
 
             holder.checkBox = convertView!!.findViewById(R.id.cb) as CheckBox
-            holder.tvAnimal = convertView.findViewById(R.id.animal) as TextView
+            holder.tvAnimal = convertView!!.findViewById(R.id.animal) as TextView
 
             convertView.tag = holder
         } else {
@@ -57,7 +57,7 @@ class CustomAdapter(private val context: Context, modelArrayList: ArrayList<Mode
             holder = convertView.tag as ViewHolder
         }
 
-        holder.checkBox!!.text = "Checkbox $position"
+//        holder.checkBox!!.text = "Checkbox $position"
         holder.tvAnimal!!.setText(modelArrayList[position].getPersons())
 
         holder.checkBox!!.isChecked = modelArrayList[position].getSelecteds()
@@ -68,7 +68,8 @@ class CustomAdapter(private val context: Context, modelArrayList: ArrayList<Mode
             val tempview = holder.checkBox!!.getTag(R.integer.btnplusview) as View
             val tv = tempview.findViewById(R.id.animal) as TextView
             val pos = holder.checkBox!!.tag as Int
-            Toast.makeText(context, "Checkbox $pos clicked!", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(context, "Checkbox $pos clicked!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, modelArrayList[position].getPersons().toString(), Toast.LENGTH_SHORT).show()
 
             if (modelArrayList[pos].getSelecteds()) {
                 modelArrayList[pos].setSelecteds(false)
@@ -78,6 +79,7 @@ class CustomAdapter(private val context: Context, modelArrayList: ArrayList<Mode
                 public_modelArrayList = modelArrayList
             }
         }
+
 
         return convertView
     }
