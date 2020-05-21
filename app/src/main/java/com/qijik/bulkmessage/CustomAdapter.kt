@@ -49,24 +49,23 @@ class CustomAdapter(private val context: Context, modelArrayList: ArrayList<Mode
             convertView = inflater.inflate(R.layout.lv_item, null, true)
 
             holder.checkBox = convertView!!.findViewById(R.id.cb) as CheckBox
-            holder.tvAnimal = convertView!!.findViewById(R.id.animal) as TextView
-
+            holder.nameSurname = convertView!!.findViewById(R.id.nameSurname) as TextView
+            holder.phoneNumber=convertView!!.findViewById(R.id.phoneNumber) as TextView
             convertView.tag = holder
         } else {
             // the getTag returns the viewHolder object set as a tag to the view
             holder = convertView.tag as ViewHolder
         }
-
 //        holder.checkBox!!.text = "Checkbox $position"
-        holder.tvAnimal!!.setText(modelArrayList[position].getPersons())
-
+        holder.nameSurname!!.setText(modelArrayList[position].getPersons())
+        holder.phoneNumber!!.setText(modelArrayList[position].getNumbers())
         holder.checkBox!!.isChecked = modelArrayList[position].getSelecteds()
 
         holder.checkBox!!.setTag(R.integer.btnplusview, convertView)
         holder.checkBox!!.tag = position
         holder.checkBox!!.setOnClickListener {
             val tempview = holder.checkBox!!.getTag(R.integer.btnplusview) as View
-            val tv = tempview.findViewById(R.id.animal) as TextView
+            val nameS = tempview.findViewById(R.id.nameSurname) as TextView
             val pos = holder.checkBox!!.tag as Int
 //            Toast.makeText(context, "Checkbox $pos clicked!", Toast.LENGTH_SHORT).show()
             Toast.makeText(context, modelArrayList[position].getPersons().toString(), Toast.LENGTH_SHORT).show()
@@ -78,6 +77,12 @@ class CustomAdapter(private val context: Context, modelArrayList: ArrayList<Mode
                 modelArrayList[pos].setSelecteds(true)
                 public_modelArrayList = modelArrayList
             }
+            for (model in modelArrayList)
+            {
+                println(model.getPersons())
+                println(model.getNumbers())
+                println(model.isSelected)
+            }
         }
 
 
@@ -87,7 +92,8 @@ class CustomAdapter(private val context: Context, modelArrayList: ArrayList<Mode
     private inner class ViewHolder {
 
         var checkBox: CheckBox? = null
-        var tvAnimal: TextView? = null
+        var nameSurname: TextView? = null
+        var phoneNumber:TextView?=null
 
     }
 

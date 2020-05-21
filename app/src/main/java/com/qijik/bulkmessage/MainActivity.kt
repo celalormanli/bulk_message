@@ -1,18 +1,17 @@
 package com.qijik.bulkmessage
 
+
 import android.content.ContentResolver
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.ContactsContract
-
-
-import android.view.View
 import android.widget.Button
 import android.widget.ListView
-import java.util.ArrayList
+import androidx.appcompat.app.AppCompatActivity
+import java.util.*
+
 
 class MainActivity : AppCompatActivity() {
     companion object {
@@ -24,34 +23,30 @@ class MainActivity : AppCompatActivity() {
     private var lv: ListView? = null
     private var modelArrayList: ArrayList<Model>? = null
     private var customAdapter: CustomAdapter? = null
-    private var btnselect: Button? = null
-    private var btndeselect: Button? = null
-    private val animallist = arrayListOf<String>()
+    private var btnSelect: Button? = null
+    private var btnSend: Button? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-//        val intent = Intent(this, SendMessage::class.java)
-//        startActivity(intent)
         loadContacts()
-        var a = listOfContacs.distinctBy { it.phoneNumber }
-        var listOfContacs = a.distinctBy { it.nameSurname }
+        var listOfContacs = listOfContacs.distinctBy { Pair(it.phoneNumber, it.phoneNumber) }
+        listOfContacs = listOfContacs.sortedWith(compareBy({ it.nameSurname }, { it.nameSurname }))
         for (contact in listOfContacs) {
-
             System.out.println(contact.nameSurname+' '+contact.phoneNumber.replace(" ",""))
             nameSurnames.add(contact.nameSurname.toString())
             phoneNumbers.add(contact.phoneNumber.toString().replace(" ",""))
-            animallist.add(contact.nameSurname.toString())
         }
 
         lv = findViewById(R.id.lv) as ListView
-        btnselect = findViewById(R.id.select) as Button
-        btndeselect = findViewById(R.id.deselect) as Button
+        btnSelect = findViewById(R.id.select) as Button
+        btnSend = findViewById(R.id.send) as Button
+        modelArrayList?.sortWith(compareBy { it.person })
         var allSelected:Boolean=false
         modelArrayList = getModel(false)
         customAdapter = CustomAdapter(this, modelArrayList!!)
         lv!!.adapter = customAdapter
-
-        btnselect!!.setOnClickListener {
+        btnSelect!!.setOnClickListener {
             if(allSelected==false) {
                 modelArrayList = getModel(true)
                 allSelected=true
@@ -65,21 +60,25 @@ class MainActivity : AppCompatActivity() {
             lv!!.adapter = customAdapter
         }
 
-        btndeselect!!.setOnClickListener {
+        btnSend!!.setOnClickListener {
+            println("HERE")
             modelArrayList = getModel(false)
-            customAdapter = CustomAdapter(this@MainActivity, modelArrayList!!)
-            CustomAdapter.public_modelArrayList = modelArrayList as ArrayList<Model>
-            lv!!.adapter = customAdapter
+            for (i in 0..modelArrayList!!.size-1){
+                println(modelArrayList!![i].getPersons())
+                println(modelArrayList!![i].getNumbers())
+                println(modelArrayList!![i].getSelecteds())
+                println("________________________")
+            }
         }
     }
 
     private fun getModel(isSelect: Boolean): ArrayList<Model> {
         val list = ArrayList<Model>()
-        for (i in 0..animallist.size-1) {
-
+        for (i in 0..nameSurnames.size-1) {
             val model = Model()
             model.setSelecteds(isSelect)
-            model.setPersons(animallist[i])
+            model.setPersons(nameSurnames[i])
+            model.setNumbers(phoneNumbers[i])
             list.add(model)
         }
         return list
@@ -92,10 +91,8 @@ class MainActivity : AppCompatActivity() {
             requestPermissions(arrayOf(android.Manifest.permission.READ_CONTACTS),
                 SendMessage.PERMISSIONS_REQUEST_READ_CONTACTS
             )
-            //callback onRequestPermissionsResult
         } else {
             builder = getContacts()
-            // print(builder)
             return builder
         }
         return builder
@@ -106,8 +103,6 @@ class MainActivity : AppCompatActivity() {
         if (requestCode == SendMessage.PERMISSIONS_REQUEST_READ_CONTACTS) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 loadContacts()
-            } else {
-                //  toast("Permission must be granted in order to display contacts information")
             }
         }
     }
@@ -115,9 +110,7 @@ class MainActivity : AppCompatActivity() {
         val builder = StringBuilder()
         val resolver: ContentResolver = contentResolver;
         val cursor = resolver.query(
-            ContactsContract.Contacts.CONTENT_URI, null, null, null,
-            null)
-
+            ContactsContract.Contacts.CONTENT_URI, null, null, null, null)
         if (cursor != null) {
             if (cursor.count > 0) {
                 while (cursor.moveToNext()) {
@@ -128,7 +121,6 @@ class MainActivity : AppCompatActivity() {
                         val cursorPhone = contentResolver.query(
                             ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
                             null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?", arrayOf(id), null)
-
                         if (cursorPhone != null) {
                             if(cursorPhone.count > 0) {
                                 while (cursorPhone.moveToNext()) {
@@ -138,9 +130,8 @@ class MainActivity : AppCompatActivity() {
                                         phoneNumValue).append("\n\n")
                                     var contact=Contact()
                                     contact.nameSurname=name
-                                    contact.phoneNumber=phoneNumValue
+                                    contact.phoneNumber=phoneNumValue.replace(" ","")
                                     listOfContacs.add(contact)
-//                                    Log.e("Name ===>",phoneNumValue);
                                 }
                             }
                         }
@@ -149,8 +140,6 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                 }
-            } else {
-                //   toast("No contacts available!")
             }
         }
         if (cursor != null) {
