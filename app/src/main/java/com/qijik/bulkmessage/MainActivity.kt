@@ -1,13 +1,13 @@
 package com.qijik.bulkmessage
-
-
 import android.content.ContentResolver
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.ContactsContract
+import android.telephony.SmsManager
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import java.util.*
@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity() {
     private var customAdapter: CustomAdapter? = null
     private var btnSelect: Button? = null
     private var btnSend: Button? = null
+    private var messageText:EditText?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +42,9 @@ class MainActivity : AppCompatActivity() {
         lv = findViewById(R.id.lv) as ListView
         btnSelect = findViewById(R.id.select) as Button
         btnSend = findViewById(R.id.send) as Button
+        messageText=findViewById(R.id.messageText)
         modelArrayList?.sortWith(compareBy { it.person })
+
         var allSelected:Boolean=false
         modelArrayList = getModel(false)
         customAdapter = CustomAdapter(this, modelArrayList!!)
@@ -61,13 +64,23 @@ class MainActivity : AppCompatActivity() {
         }
 
         btnSend!!.setOnClickListener {
-            println("HERE")
-            modelArrayList = getModel(false)
+            modelArrayList = customAdapter!!.getModelArrayLisst()
             for (i in 0..modelArrayList!!.size-1){
-                println(modelArrayList!![i].getPersons())
-                println(modelArrayList!![i].getNumbers())
-                println(modelArrayList!![i].getSelecteds())
-                println("________________________")
+               // println(modelArrayList!![i].getPersons().split(' '))
+             //   println(modelArrayList!![i].getNumbers())
+             //   println(modelArrayList!![i].getSelecteds())
+                if(modelArrayList!![i].getSelecteds()==true) {
+                    var message: String = messageText?.text.toString()
+                    if(message.length>0){
+                    message =message.replace("#isimsoyisim", modelArrayList!![i].getPersons().toString())
+                    message = message.replace("#isim",modelArrayList!![i].getPersons().split(' ')[0].toString()
+                    )
+                    println(message)
+                    // println("________________________")
+//                val smsManager = SmsManager.getDefault() as SmsManager
+//                smsManager.sendTextMessage("05075972188", null, "sms message", null, null)
+                    }
+                }
             }
         }
     }
@@ -97,7 +110,6 @@ class MainActivity : AppCompatActivity() {
         }
         return builder
     }
-
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
                                             grantResults: IntArray) {
         if (requestCode == SendMessage.PERMISSIONS_REQUEST_READ_CONTACTS) {

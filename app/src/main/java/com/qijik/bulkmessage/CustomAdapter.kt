@@ -26,6 +26,10 @@ class CustomAdapter(private val context: Context, modelArrayList: ArrayList<Mode
         return position
     }
 
+    fun getModelArrayLisst(): ArrayList<Model> {
+        return modelArrayList
+    }
+
     override fun getCount(): Int {
         return modelArrayList.size
     }
@@ -41,7 +45,6 @@ class CustomAdapter(private val context: Context, modelArrayList: ArrayList<Mode
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         var convertView = convertView
         val holder: ViewHolder
-
         if (convertView == null) {
             holder = ViewHolder()
             val inflater = context
@@ -53,21 +56,17 @@ class CustomAdapter(private val context: Context, modelArrayList: ArrayList<Mode
             holder.phoneNumber=convertView!!.findViewById(R.id.phoneNumber) as TextView
             convertView.tag = holder
         } else {
-            // the getTag returns the viewHolder object set as a tag to the view
             holder = convertView.tag as ViewHolder
         }
-//        holder.checkBox!!.text = "Checkbox $position"
         holder.nameSurname!!.setText(modelArrayList[position].getPersons())
         holder.phoneNumber!!.setText(modelArrayList[position].getNumbers())
         holder.checkBox!!.isChecked = modelArrayList[position].getSelecteds()
-
         holder.checkBox!!.setTag(R.integer.btnplusview, convertView)
         holder.checkBox!!.tag = position
         holder.checkBox!!.setOnClickListener {
             val tempview = holder.checkBox!!.getTag(R.integer.btnplusview) as View
             val nameS = tempview.findViewById(R.id.nameSurname) as TextView
             val pos = holder.checkBox!!.tag as Int
-//            Toast.makeText(context, "Checkbox $pos clicked!", Toast.LENGTH_SHORT).show()
             Toast.makeText(context, modelArrayList[position].getPersons().toString(), Toast.LENGTH_SHORT).show()
 
             if (modelArrayList[pos].getSelecteds()) {
@@ -84,21 +83,14 @@ class CustomAdapter(private val context: Context, modelArrayList: ArrayList<Mode
                 println(model.isSelected)
             }
         }
-
-
         return convertView
     }
-
     private inner class ViewHolder {
-
         var checkBox: CheckBox? = null
         var nameSurname: TextView? = null
         var phoneNumber:TextView?=null
-
     }
-
     companion object {
         lateinit var public_modelArrayList: ArrayList<Model>
     }
-
 }
