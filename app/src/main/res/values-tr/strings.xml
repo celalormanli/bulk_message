@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Toplu Mesaj</string>
+    <string name="select_all">Tümünü Seç</string>
+    <string name="send">Gönder</string>
+</resources>

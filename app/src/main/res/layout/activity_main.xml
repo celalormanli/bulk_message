@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/main_background"
     android:orientation="vertical"
     tools:context=".MainActivity">
     <LinearLayout
@@ -28,18 +29,27 @@
         android:orientation="horizontal">
 
         <Button
+            android:background="@drawable/button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:id="@+id/select"
+            android:text="@string/select_all"/>
+        <Button
+            android:background="@drawable/button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:id="@+id/select"
-            android:text="Select all"/>
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_weight="1"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginBottom="5dp"
             android:id="@+id/send"
-            android:text="Send"/>
+            android:text="@string/send"/>
     </LinearLayout>
 
 

@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        supportActionBar?.setBackgroundDrawable(resources.getDrawable(R.drawable.main_background))
         loadContacts()
         var listOfContacs = listOfContacs.distinctBy { Pair(it.phoneNumber, it.phoneNumber) }
         listOfContacs = listOfContacs.sortedWith(compareBy({ it.nameSurname }, { it.nameSurname }))
@@ -102,7 +103,7 @@ class MainActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(
                 android.Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(arrayOf(android.Manifest.permission.READ_CONTACTS),
-                SendMessage.PERMISSIONS_REQUEST_READ_CONTACTS
+                MainActivity.PERMISSIONS_REQUEST_READ_CONTACTS
             )
         } else {
             builder = getContacts()
@@ -112,7 +113,7 @@ class MainActivity : AppCompatActivity() {
     }
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
                                             grantResults: IntArray) {
-        if (requestCode == SendMessage.PERMISSIONS_REQUEST_READ_CONTACTS) {
+        if (requestCode == MainActivity.PERMISSIONS_REQUEST_READ_CONTACTS) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 loadContacts()
             }
