@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_main.view.*
 import java.util.*
 
 
@@ -25,6 +26,8 @@ class MainActivity : AppCompatActivity() {
     private var customAdapter: CustomAdapter? = null
     private var btnSelect: Button? = null
     private var btnSend: Button? = null
+    private var btnName: Button? = null
+    private var btnNameSurname: Button? = null
     private var messageText:EditText?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,9 +44,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         lv = findViewById(R.id.lv) as ListView
-        btnSelect = findViewById(R.id.select) as Button
-        btnSend = findViewById(R.id.send) as Button
-        messageText=findViewById(R.id.messageText)
+        btnSelect = findViewById(R.id.btnSelect) as Button
+        btnSend = findViewById(R.id.btnSend) as Button
+        btnName=findViewById(R.id.btnName) as Button
+        btnNameSurname=findViewById(R.id.btnNameSurname) as Button
+        messageText=findViewById(R.id.messageText) as EditText
         modelArrayList?.sortWith(compareBy { it.person })
 
         var allSelected:Boolean=false
@@ -73,8 +78,8 @@ class MainActivity : AppCompatActivity() {
                 if(modelArrayList!![i].getSelecteds()==true) {
                     var message: String = messageText?.text.toString()
                     if(message.length>0){
-                    message =message.replace("#isimsoyisim", modelArrayList!![i].getPersons().toString())
-                    message = message.replace("#isim",modelArrayList!![i].getPersons().split(' ')[0].toString()
+                    message =message.replace(getString(R.string.name_surname_txt), modelArrayList!![i].getPersons().toString())
+                    message = message.replace(getString(R.string.name_txt),modelArrayList!![i].getPersons().split(' ')[0].toString()
                     )
                     println(message)
                     // println("________________________")
@@ -83,6 +88,23 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
+        }
+        btnName!!.setOnClickListener {
+            println("HERE")
+            var cursorPosition = messageText!!.getSelectionStart();
+            println(cursorPosition.toString())
+            var tmpText= messageText!!.text.toString()
+            tmpText = tmpText.substring(0, cursorPosition) + getString(R.string.name_txt).toString() + tmpText.substring(cursorPosition, tmpText.length)
+            messageText!!.setText(tmpText.toString())
+            messageText!!.setSelection(cursorPosition+getString(R.string.name_txt).toString().length)
+        }
+        btnNameSurname!!.setOnClickListener {
+            var cursorPosition = messageText!!.getSelectionStart();
+            println(cursorPosition.toString())
+            var tmpText= messageText!!.text.toString()
+            tmpText = tmpText.substring(0, cursorPosition) + getString(R.string.name_surname_txt).toString() + tmpText.substring(cursorPosition, tmpText.length)
+            messageText!!.setText(tmpText.toString())
+            messageText!!.setSelection(cursorPosition+getString(R.string.name_surname_txt).toString().length)
         }
     }
 

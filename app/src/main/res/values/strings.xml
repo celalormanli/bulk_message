@@ -2,5 +2,8 @@
     <string name="app_name">Bulk Message</string>
     <string name="select_all">Select All</string>
     <string name="send">Send</string>
-
+    <string name="name">Name</string>
+    <string name="name_surname">Name Surname</string>
+    <string name="name_txt">#name#</string>
+    <string name="name_surname_txt">#namesurname#</string>
 </resources>
