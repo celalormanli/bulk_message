@@ -12,8 +12,9 @@ import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.view.*
 import java.util.*
+import kotlin.system.exitProcess
 
-
+//TODO:permission sorunu çözülecek
 class MainActivity : AppCompatActivity() {
     companion object {
         val PERMISSIONS_REQUEST_READ_CONTACTS = 100
@@ -42,6 +43,8 @@ class MainActivity : AppCompatActivity() {
             nameSurnames.add(contact.nameSurname.toString())
             phoneNumbers.add(contact.phoneNumber.toString().replace(" ",""))
         }
+
+
 
         lv = findViewById(R.id.lv) as ListView
         btnSelect = findViewById(R.id.btnSelect) as Button
@@ -106,6 +109,12 @@ class MainActivity : AppCompatActivity() {
             messageText!!.setText(tmpText.toString())
             messageText!!.setSelection(cursorPosition+getString(R.string.name_surname_txt).toString().length)
         }
+    }
+
+    override fun onBackPressed() {
+        moveTaskToBack(true);
+        exitProcess(-1)
+        super.onBackPressed()
     }
 
     private fun getModel(isSelect: Boolean): ArrayList<Model> {
