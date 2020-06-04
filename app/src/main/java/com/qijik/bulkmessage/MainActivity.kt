@@ -130,20 +130,16 @@ class MainActivity : AppCompatActivity() {
     }
     private fun loadContacts(): StringBuilder {
         var builder = StringBuilder()
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(
-                android.Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(arrayOf(android.Manifest.permission.READ_CONTACTS),
-                MainActivity.PERMISSIONS_REQUEST_READ_CONTACTS
-            )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(android.Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED)
+        {
+            requestPermissions(arrayOf(android.Manifest.permission.READ_CONTACTS), MainActivity.PERMISSIONS_REQUEST_READ_CONTACTS)
         } else {
             builder = getContacts()
             return builder
         }
         return builder
     }
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
-                                            grantResults: IntArray) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         if (requestCode == MainActivity.PERMISSIONS_REQUEST_READ_CONTACTS) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 loadContacts()

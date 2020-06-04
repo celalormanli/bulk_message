@@ -20,6 +20,7 @@ class Cover : AppCompatActivity() {
         )
         getSupportActionBar()?.hide();
         val handler = Handler()
+
         handler.postDelayed({
             val intent = Intent(baseContext, MainActivity::class.java)
             startActivity(intent)
