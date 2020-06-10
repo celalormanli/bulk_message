@@ -43,9 +43,6 @@ class MainActivity : AppCompatActivity() {
             nameSurnames.add(contact.nameSurname.toString())
             phoneNumbers.add(contact.phoneNumber.toString().replace(" ",""))
         }
-
-
-
         lv = findViewById(R.id.lv) as ListView
         btnSelect = findViewById(R.id.btnSelect) as Button
         btnSend = findViewById(R.id.btnSend) as Button
@@ -129,6 +126,7 @@ class MainActivity : AppCompatActivity() {
         return list
     }
     private fun loadContacts(): StringBuilder {
+
         var builder = StringBuilder()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(android.Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED)
         {
