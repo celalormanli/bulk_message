@@ -6,4 +6,6 @@
     <string name="name_surname">İsim Soyisim</string>
     <string name="name_txt">#isim#</string>
     <string name="name_surname_txt">#soyisim#</string>
+    <string name="response_for_denied_sms_permission">Mesajları göndermek istiyorsanız, izin vermelisiniz</string>
+    <string name="are_you_sure">Emin misiniz?</string>
 </resources>

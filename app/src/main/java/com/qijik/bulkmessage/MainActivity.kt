@@ -1,5 +1,8 @@
 package com.qijik.bulkmessage
+import android.Manifest
+import android.app.AlertDialog
 import android.content.ContentResolver
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -9,12 +12,14 @@ import android.telephony.SmsManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ListView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import kotlinx.android.synthetic.main.activity_main.view.*
 import java.util.*
 import kotlin.system.exitProcess
 
-//TODO:permission sorunu çözülecek
+
 class MainActivity : AppCompatActivity() {
     companion object {
         val PERMISSIONS_REQUEST_READ_CONTACTS = 100
@@ -70,23 +75,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         btnSend!!.setOnClickListener {
-            modelArrayList = customAdapter!!.getModelArrayLisst()
-            for (i in 0..modelArrayList!!.size-1){
-               // println(modelArrayList!![i].getPersons().split(' '))
-             //   println(modelArrayList!![i].getNumbers())
-             //   println(modelArrayList!![i].getSelecteds())
-                if(modelArrayList!![i].getSelecteds()==true) {
-                    var message: String = messageText?.text.toString()
-                    if(message.length>0){
-                    message =message.replace(getString(R.string.name_surname_txt), modelArrayList!![i].getPersons().toString())
-                    message = message.replace(getString(R.string.name_txt),modelArrayList!![i].getPersons().split(' ')[0].toString()
-                    )
-                    println(message)
-                    // println("________________________")
-//                val smsManager = SmsManager.getDefault() as SmsManager
-//                smsManager.sendTextMessage("05075972188", null, "sms message", null, null)
-                    }
-                }
+            if(ActivityCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.SEND_SMS),2)
+            }
+            else{
+                sendMessages()
             }
         }
         btnName!!.setOnClickListener {
@@ -107,7 +100,36 @@ class MainActivity : AppCompatActivity() {
             messageText!!.setSelection(cursorPosition+getString(R.string.name_surname_txt).toString().length)
         }
     }
-
+    val positiveButtonClick = { dialog: DialogInterface, which: Int ->
+        modelArrayList = customAdapter!!.getModelArrayLisst()
+        for (i in 0..modelArrayList!!.size-1){
+            if(modelArrayList!![i].getSelecteds()==true) {
+                var message: String = messageText?.text.toString()
+                if(message.length>0){
+                    message =message.replace(getString(R.string.name_surname_txt), modelArrayList!![i].getPersons().toString())
+                    message = message.replace(getString(R.string.name_txt),modelArrayList!![i].getPersons().split(' ')[0].toString()
+                    )
+                    println(message)
+                    //                val smsManager = SmsManager.getDefault() as SmsManager
+                    //                smsManager.sendTextMessage("05075972188", null, "sms message", null, null)
+                }
+            }
+        }
+    }
+    val negativeButtonClick = { dialog: DialogInterface, which: Int ->
+        Toast.makeText(applicationContext,"Neg", Toast.LENGTH_SHORT).show()
+    }
+    fun sendMessages(){
+        val builder = AlertDialog.Builder(this)
+        with(builder)
+        {
+            setTitle(getString(R.string.send))
+            setMessage(messageText?.text.toString())
+            setPositiveButton("OK", DialogInterface.OnClickListener(function = positiveButtonClick))
+            setNegativeButton("No",DialogInterface.OnClickListener(function = negativeButtonClick))
+            show()
+        }
+    }
     override fun onBackPressed() {
         moveTaskToBack(true);
         exitProcess(-1)
@@ -126,22 +148,19 @@ class MainActivity : AppCompatActivity() {
         return list
     }
     private fun loadContacts(): StringBuilder {
-
         var builder = StringBuilder()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(android.Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED)
-        {
-            requestPermissions(arrayOf(android.Manifest.permission.READ_CONTACTS), MainActivity.PERMISSIONS_REQUEST_READ_CONTACTS)
-        } else {
-            builder = getContacts()
-            return builder
-        }
+        builder = getContacts()
         return builder
     }
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        if (requestCode == MainActivity.PERMISSIONS_REQUEST_READ_CONTACTS) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                loadContacts()
-            }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (grantResults[0]==PackageManager.PERMISSION_GRANTED)
+        {
+            sendMessages()
+        }
+        if (grantResults[0]==PackageManager.PERMISSION_DENIED)
+        {
+            Toast.makeText(this, getString(R.string.response_for_denied_sms_permission),Toast.LENGTH_SHORT).show()
         }
     }
     private fun getContacts(): StringBuilder {

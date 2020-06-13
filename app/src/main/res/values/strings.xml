@@ -6,4 +6,6 @@
     <string name="name_surname">Name Surname</string>
     <string name="name_txt">#name#</string>
     <string name="name_surname_txt">#namesurname#</string>
+    <string name="response_for_denied_sms_permission">If you want to send messages, you must allow</string>
+    <string name="are_you_sure">Are you sure?</string>
 </resources>
