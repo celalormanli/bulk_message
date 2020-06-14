@@ -8,4 +8,7 @@
     <string name="name_surname_txt">#namesurname#</string>
     <string name="response_for_denied_sms_permission">If you want to send messages, you must allow</string>
     <string name="are_you_sure">Are you sure?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="submission_completed">submission completed</string>
 </resources>

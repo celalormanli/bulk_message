@@ -106,27 +106,26 @@ class MainActivity : AppCompatActivity() {
             if(modelArrayList!![i].getSelecteds()==true) {
                 var message: String = messageText?.text.toString()
                 if(message.length>0){
-                    message =message.replace(getString(R.string.name_surname_txt), modelArrayList!![i].getPersons().toString())
-                    message = message.replace(getString(R.string.name_txt),modelArrayList!![i].getPersons().split(' ')[0].toString()
+                        message =message.replace(getString(R.string.name_surname_txt), modelArrayList!![i].getPersons().toString())
+                        message = message.replace(getString(R.string.name_txt),modelArrayList!![i].getPersons().split(' ')[0].toString()
                     )
                     println(message)
-                    //                val smsManager = SmsManager.getDefault() as SmsManager
-                    //                smsManager.sendTextMessage("05075972188", null, "sms message", null, null)
+                    SmsManager.getDefault().sendTextMessage(modelArrayList!![i].getNumbers(), null, message.toString(), null, null)
                 }
             }
         }
     }
     val negativeButtonClick = { dialog: DialogInterface, which: Int ->
-        Toast.makeText(applicationContext,"Neg", Toast.LENGTH_SHORT).show()
+
     }
     fun sendMessages(){
         val builder = AlertDialog.Builder(this)
         with(builder)
         {
-            setTitle(getString(R.string.send))
+            setTitle(getString(R.string.are_you_sure))
             setMessage(messageText?.text.toString())
-            setPositiveButton("OK", DialogInterface.OnClickListener(function = positiveButtonClick))
-            setNegativeButton("No",DialogInterface.OnClickListener(function = negativeButtonClick))
+            setPositiveButton(getString(R.string.yes), DialogInterface.OnClickListener(function = positiveButtonClick))
+            setNegativeButton(getString(R.string.no),DialogInterface.OnClickListener(function = negativeButtonClick))
             show()
         }
     }
